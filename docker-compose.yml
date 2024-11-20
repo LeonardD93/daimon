@@ -44,6 +44,8 @@ services:
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
     networks:
       - daimon_net
+    expose:
+    - "9000"
 
   phpmyadmin: # used only in development for testing, be sure to don't use it in production
     image: phpmyadmin/phpmyadmin
