@@ -22,9 +22,9 @@ Web application Laravel che permette agli utenti di autenticarsi, ottenere un to
 ### Istruzioni
 1. Clona il repository:
 ```bash
-   git clone https://github.com/LeonardD93/daimon.git
+git clone https://github.com/LeonardD93/daimon.git
 
-   cd daimon
+cd daimon
 ```
 
 2. Copia il file .env per i container: Copia il file .env.example come .env e configuralo se necessario: 
