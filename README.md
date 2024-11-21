@@ -22,31 +22,57 @@ Web application Laravel che permette agli utenti di autenticarsi, ottenere un to
 ### Istruzioni
 1. Clona il repository:
 ```bash
-   git clone https://github.com/username/repository.git
+   git clone https://github.com/LeonardD93/daimon.git
 
-   cd repository
+   cd daimon
 ```
 
-2. Copia il file .env: Copia il file .env.example come .env e configuralo se necessario:
+2. Copia il file .env per i container: Copia il file .env.example come .env e configuralo se necessario: 
 ```bash
 cp .env.example .env
 
 ```
-3. Genera la chiave dell'applicazione:
+
+3. eseguire la stessa cosa anche per il file .env dell applicazione laravel
+```bash
+cd app_beer
+cp .env.example .env
+
+```
+
+4. Avvia i container Docker:
+tornarea alla cartella padre e avviare i containers
+```bash
+cd ..
+docker-compose up -d
+
+```
+
+5. Entrare nel contaier 
+```bash
+docker exec -it daimon_app bash
+```
+
+6. scaricare le dipendenze ( se ci sono problemi di permessi settare propriamente i permessi della cartella app_beer)
+```bash
+composer update
+```
+
+7. Genera la chiave dell'applicazione:
 ```bash
 php artisan key:generate
 
 ```
 
-4. Avvia i container Docker:
+8. La documentazione delle API è disponibile all'indirizzo:
 ```bash
-docker-compose up -d
+http://localhost:8080/api/documentation
 
 ```
 
-5. La documentazione delle API è disponibile all'indirizzo:
+9. Se viene modificata la documentazione puoi rigenerare la pagina di swagger
 ```bash
-http://localhost:8080/api/documentation
+php artisan l5-swagger:generate
 
 ```
 
