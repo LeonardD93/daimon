@@ -93,3 +93,5 @@ Per utilizzare le api si puo utilizzare direttamente swagger
 quindi fare il login con la relativa  (Authentication/login => try it out =>Execute)
 una volta ricevuto il token si puo salvare nella pagina (pulsante Authorize con bordo verde in alto a destra )
 una volta salvato il token quindi si possono provare anche il risultato del altra api (Breweries =>get)
+
+oppure si puo guardare l'implementazione del front end dentro la vista welcome
