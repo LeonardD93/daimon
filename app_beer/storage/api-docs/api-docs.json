@@ -12,7 +12,7 @@
                     "Authentication"
                 ],
                 "summary": "Login user",
-                "description": "Logs in a user with email and password",
+                "description": "Logs in a user using either email or username along with a password.",
                 "operationId": "3673edffcdc18c06ac5aef5e2219d774",
                 "requestBody": {
                     "required": true,
@@ -20,16 +20,17 @@
                         "application/json": {
                             "schema": {
                                 "required": [
-                                    "email",
+                                    "username",
                                     "password"
                                 ],
                                 "properties": {
-                                    "email": {
+                                    "username": {
+                                        "description": "User's email or username",
                                         "type": "string",
-                                        "format": "email",
-                                        "example": "test@example.com"
+                                        "example": "root"
                                     },
                                     "password": {
+                                        "description": "User's password",
                                         "type": "string",
                                         "format": "password",
                                         "example": "password"
@@ -48,10 +49,27 @@
                                 "schema": {
                                     "properties": {
                                         "token": {
+                                            "description": "Generated API token",
                                             "type": "string",
                                             "example": "1|qf2gkdsfksv"
                                         },
                                         "user": {
+                                            "description": "Details of the logged-in user",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "root"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "format": "email",
+                                                    "example": "root@example.com"
+                                                }
+                                            },
                                             "type": "object"
                                         }
                                     },
@@ -61,7 +79,20 @@
                         }
                     },
                     "401": {
-                        "description": "Invalid credentials"
+                        "description": "Invalid credentials",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Invalid credentials"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
                 }
             }

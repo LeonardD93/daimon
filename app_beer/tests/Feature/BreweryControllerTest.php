@@ -1,7 +1,9 @@
 <?php
+
 namespace Tests\Feature;
 
 use Tests\TestCase;
+use App\Models\User;
 
 class BreweryControllerTest extends TestCase
 {
@@ -19,66 +21,51 @@ class BreweryControllerTest extends TestCase
     /** @test */
     public function it_returns_paginated_breweries_with_default_parameters()
     {
-        // Genera un token di esempio
-        $user = \App\Models\User::factory()->create();
+        $user = User::factory()->create();
         $token = $user->createToken('TestToken')->plainTextToken;
-    
-        // Effettua una richiesta autenticata
-        $response = $this->withHeaders([
-            'Authorization' => "Bearer $token",
-        ])->getJson('/api/breweries');
-    
-        $response->assertStatus(200);
-    
-        $response->assertJsonStructure([
-            '*' => [
-                'id',
-                'name',
-                'brewery_type',
-                'address_1',
-                'address_2',
-                'address_3',
-                'city',
-                'state_province',
-                'postal_code',
-                'country',
-                'longitude',
-                'latitude',
-                'phone',
-                'website_url',
-                'state',
-                'street',
-            ]
-        ]);
-    
-        $this->assertCount(10, $response->json(), 'The response should contain 10 breweries by default.');  
-        $this->assertNotNull($response->json()[0]['id'], 'The first brewery should have an ID');
-        $this->assertNotNull($response->json()[0]['name'], 'The first brewery should have a name');
-    
+
+        $response = $this->getPaginatedBreweries($token);
+
+        $response->assertStatus(200)
+                 ->assertJsonStructure($this->getBreweryJsonStructure());
+
+        $this->assertCount(10, $response->json(), 'The response should contain 10 breweries by default.');
+        $this->assertBreweryData($response->json()[0]);
+
         $user->delete();
     }
-    
+
     /** @test */
     public function it_returns_paginated_breweries_with_custom_parameters()
     {
-        // Genera un token di esempio
-        $user = \App\Models\User::factory()->create();
+        $user = User::factory()->create();
         $token = $user->createToken('TestToken')->plainTextToken;
-    
-        // Parametri personalizzati
+
         $page = 2;
         $perPage = 5;
-    
-        // Effettua una richiesta autenticata con parametri personalizzati
-        $response = $this->withHeaders([
+
+        $response = $this->getPaginatedBreweries($token, $page, $perPage);
+
+        $response->assertStatus(200)
+                 ->assertJsonStructure($this->getBreweryJsonStructure());
+
+        $this->assertCount($perPage, $response->json(), "The response should contain $perPage breweries.");
+        $this->assertEquals($page, 2, 'The response should return the correct page.');
+        $this->assertBreweryData($response->json()[0]);
+
+        $user->delete();
+    }
+
+    private function getPaginatedBreweries(string $token, int $page = 1, int $perPage = 10)
+    {
+        return $this->withHeaders([
             'Authorization' => "Bearer $token",
         ])->getJson("/api/breweries?page=$page&per_page=$perPage");
-    
-        // Verifica lo stato della risposta
-        $response->assertStatus(200);
-    
-        // Verifica la struttura della risposta
-        $response->assertJsonStructure([
+    }
+
+    private function getBreweryJsonStructure(): array
+    {
+        return [
             '*' => [
                 'id',
                 'name',
@@ -97,20 +84,12 @@ class BreweryControllerTest extends TestCase
                 'state',
                 'street',
             ]
-        ]);
-    
-        // Verifica il numero di elementi restituiti
-        $this->assertCount($perPage, $response->json(), "The response should contain $perPage breweries.");
-    
-        // Verifica che alcuni valori specifici siano presenti
-        $this->assertEquals($page, 2, 'The response should return the correct page.');
-    
-        // Verifica che il primo elemento abbia i campi principali
-        $this->assertNotNull($response->json()[0]['id'], 'The first brewery should have an ID');
-        $this->assertNotNull($response->json()[0]['name'], 'The first brewery should have a name');
-    
-        // Cancella l'utente per pulizia
-        $user->delete();
+        ];
     }
     
+    private function assertBreweryData(array $brewery)
+    {
+        $this->assertNotNull($brewery['id'], 'The brewery should have an ID');
+        $this->assertNotNull($brewery['name'], 'The brewery should have a name');
+    }
 }
