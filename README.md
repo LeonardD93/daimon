@@ -63,14 +63,25 @@ composer update
 php artisan key:generate
 
 ```
+8. Genera l'utente root nel db per fare il test (username=>root  password=>password)
+```bash
+php artisan db:seed
 
-8. La documentazione delle API è disponibile all'indirizzo:
+```
+
+9. Per testare l'applicazione se non sono state cambiate le impostazioni docker si puo fare il login al url locale con le credenziali appena inserite nel db
+```bash
+http://localhost:8080
+
+```
+
+10. La documentazione delle API è disponibile all'indirizzo:
 ```bash
 http://localhost:8080/api/documentation
 
 ```
 
-9. Se viene modificata la documentazione puoi rigenerare la pagina di swagger
+11. Se viene modificata la documentazione puoi rigenerare la pagina di swagger
 ```bash
 php artisan l5-swagger:generate
 
